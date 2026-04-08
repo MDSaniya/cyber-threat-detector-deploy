@@ -47,6 +47,12 @@ app.config['DEBUG'] = os.environ.get('DEBUG', 'False').lower() == 'true'
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200 MB max upload
 
 # ─────────────────────────────────────────────────────────────
+# CONSTANTS & MOCK DATA (For UI stability)
+# ─────────────────────────────────────────────────────────────
+THREAT_TYPES = ["Normal", "DDoS", "Malware", "Phishing", "Brute Force", "SQL Injection"]
+ALGORITHM_RESULTS = ["KNN", "SVM", "Decision Tree", "Random Forest", "RF+PSO", "RF+GA"]
+
+# ─────────────────────────────────────────────────────────────
 # LOAD TRAINED MODEL - (REMOVED: The app now uses dynamic training)
 # ─────────────────────────────────────────────────────────────
 
@@ -76,7 +82,13 @@ def api_compare_models():
         if not file.filename.lower().endswith('.csv'):
             return jsonify({"error": "Only CSV files are supported"}), 400
 
-        stream = io.StringIO(file.stream.read().decode('utf-8'))
+        try:
+            content = file.stream.read().decode('utf-8')
+        except UnicodeDecodeError:
+            file.stream.seek(0)
+            content = file.stream.read().decode('latin-1')
+            
+        stream = io.StringIO(content)
         df = pd.read_csv(stream)
         
         if df.empty:
@@ -103,17 +115,22 @@ def api_compare_models():
         X = df.drop(columns=[target_col])
         y = df[target_col]
 
-        # Use One-Hot Encoding for small categoricals to boost accuracy, Label Encode massive text
+        # Preprocessing: Handle missing values and scale categories
+        print(f"DEBUG: Starting preprocessing for {len(df)} rows and {len(df.columns)} columns")
+        
         for col in X.columns:
             if X[col].dtype == 'object' or str(X[col].dtype) == 'category':
                 X[col].fillna(X[col].mode()[0] if not X[col].mode().empty else 'Unknown', inplace=True)
-                if X[col].nunique() > 20:
+                # If cardinality is high, use Label Encoding to prevent column explosion
+                if X[col].nunique() > 10: 
                     le = LabelEncoder()
                     X[col] = le.fit_transform(X[col].astype(str))
             else:
                 X[col].fillna(X[col].median() if not pd.isna(X[col].median()) else 0, inplace=True)
                 
+        # One-hot encode remaining low-cardinality columns
         X = pd.get_dummies(X)
+        print(f"DEBUG: Dataset expanded to {X.shape[1]} features after encoding")
 
         if y.dtype == 'object' or str(y.dtype) == 'category':
             le_y = LabelEncoder()
@@ -168,7 +185,9 @@ def api_compare_models():
             elif name == "Random Forest":
                 param_grid = {'n_estimators': [50, 100], 'max_depth': [10, None]}
                 
-            gs = GridSearchCV(m, param_grid, cv=3, n_jobs=-1)
+            # Use n_jobs=1 to avoid OOM on limited cloud environments
+            gs = GridSearchCV(m, param_grid, cv=2, n_jobs=1)
+            print(f"DEBUG: Running GridSearch for {name}")
             gs.fit(X_train_scaled, y_train)
             evaluate_temp(y_test, gs.best_estimator_.predict(X_test_scaled), f"{name} + Grid Search")
 
@@ -181,7 +200,7 @@ def api_compare_models():
                 elif name == "Decision Tree":
                     model = DecisionTreeClassifier(max_depth=max(5, min(30, int(params[0]))), random_state=42)
                 elif name == "Random Forest":
-                    model = RandomForestClassifier(n_estimators=max(10, min(100, int(params[0]))), max_depth=max(5, min(30, int(params[1]))), random_state=42, n_jobs=-1)
+                    model = RandomForestClassifier(n_estimators=max(10, min(100, int(params[0]))), max_depth=max(5, min(30, int(params[1]))), random_state=42, n_jobs=1)
                 model.fit(X_train_scaled, y_train)
                 return 1.0 - accuracy_score(y_test, model.predict(X_test_scaled))
 
@@ -240,7 +259,7 @@ def api_compare_models():
                 if name == "KNN": model = KNeighborsClassifier(n_neighbors=int(ind[0]))
                 elif name == "SVM": model = SVC(C=float(ind[0]), kernel='rbf', random_state=42)
                 elif name == "Decision Tree": model = DecisionTreeClassifier(max_depth=int(ind[0]), random_state=42)
-                elif name == "Random Forest": model = RandomForestClassifier(n_estimators=int(ind[0]), max_depth=int(ind[1]), random_state=42, n_jobs=-1)
+                elif name == "Random Forest": model = RandomForestClassifier(n_estimators=int(ind[0]), max_depth=int(ind[1]), random_state=42, n_jobs=1)
                 
                 model.fit(X_train_scaled, y_train)
                 return (accuracy_score(y_test, model.predict(X_test_scaled)), )
@@ -285,13 +304,17 @@ def api_compare_models():
             evaluate_temp(y_test, final.predict(X_test_scaled), f"{name} + GA")
 
         # Run configured mode
+        print("DEBUG: Executing model evaluation loop")
         for name, m in base_models.items():
+            print(f"DEBUG: Processing {name}")
             optimize_pso(name)  # Always run the "best" optimization technique
             
             if compute_mode == 'comprehensive':
+                print(f"DEBUG: Running comprehensive optimizers for {name}")
                 optimize_grid_search(name, m)
                 optimize_ga(name)
 
+        print("DEBUG: Pipeline complete, generating response")
         res_df = pd.DataFrame.from_dict(final_results, orient='index')
         
         plt.figure(figsize=(10, 4))

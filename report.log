@@ -151,3 +151,27 @@
 2026-04-08 19:20:17,889 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:20:17] "GET / HTTP/1.1" 200 -
 2026-04-08 19:27:47,481 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:27:47] "GET / HTTP/1.1" 200 -
 2026-04-08 19:28:02,084 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:28:02] "POST /api/compare-models HTTP/1.1" 200 -
+2026-04-08 19:45:27,937 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:45:27] "GET / HTTP/1.1" 200 -
+2026-04-08 19:45:43,723 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:45:43] "POST /api/compare-models HTTP/1.1" 200 -
+2026-04-08 19:49:39,598 - werkzeug - INFO -  * Detected change in 'C:\\Users\\saniy\\Desktop\\major project\\cyber-threat-detector-deploy\\app.py', reloading
+2026-04-08 19:49:39,823 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 19:49:41,682 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 19:49:41,685 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 19:49:55,544 - werkzeug - INFO -  * Detected change in 'C:\\Users\\saniy\\Desktop\\major project\\cyber-threat-detector-deploy\\app.py', reloading
+2026-04-08 19:49:55,787 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 19:49:57,617 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 19:49:57,621 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 19:50:16,016 - werkzeug - INFO -  * Detected change in 'C:\\Users\\saniy\\Desktop\\major project\\cyber-threat-detector-deploy\\app.py', reloading
+2026-04-08 19:50:16,223 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 19:50:18,049 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 19:50:18,052 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 19:54:44,146 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 19:54:44,147 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 19:54:44,148 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 19:54:45,918 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 19:54:45,922 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 19:54:54,781 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:54:54] "GET / HTTP/1.1" 200 -
+2026-04-08 19:55:39,249 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:55:39] "POST /api/compare-models HTTP/1.1" 200 -
