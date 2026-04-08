@@ -822,11 +822,284 @@
             color: var(--text-muted);
         }
 
+        /* ─── UPLOAD SECTION ─── */
+        .upload-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .upload-zone-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .upload-dropzone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 48px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--surface2);
+            position: relative;
+        }
+
+        .upload-dropzone:hover,
+        .upload-dropzone.drag-over {
+            border-color: var(--accent);
+            background: rgba(0,212,255,0.05);
+            box-shadow: var(--glow);
+        }
+
+        .upload-dropzone-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+
+        .upload-dropzone-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .upload-dropzone-sub {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .upload-file-info {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: rgba(0,212,255,0.06);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 10px;
+            margin-top: 16px;
+        }
+
+        .upload-file-info.visible { display: flex; }
+
+        .upload-file-icon { font-size: 22px; }
+
+        .upload-file-name {
+            font-size: 13px;
+            font-weight: 600;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .upload-file-size {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .upload-file-remove {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .upload-file-remove:hover { background: rgba(239,68,68,0.15); }
+
+        .btn-upload {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent3), #059669);
+            color: white;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(16,185,129,0.3);
+            margin-top: 20px;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 30px rgba(16,185,129,0.4);
+        }
+
+        .btn-upload:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-upload.loading { opacity: 0.7; cursor: wait; }
+
+        /* Upload Results */
+        .upload-results-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .upload-results-placeholder {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: var(--text-muted);
+            text-align: center;
+            min-height: 300px;
+        }
+
+        .upload-summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .upload-summary-card {
+            background: var(--surface2);
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .upload-summary-label {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .upload-summary-value {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .threat-dist-section {
+            margin-bottom: 20px;
+        }
+
+        .threat-dist-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .threat-dist-label {
+            font-size: 11px;
+            width: 120px;
+            flex-shrink: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .threat-dist-bar {
+            flex: 1;
+            height: 20px;
+            background: var(--surface2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .threat-dist-fill {
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--bg);
+            transition: width 0.8s ease;
+            min-width: 28px;
+        }
+
+        .upload-table-wrap {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .upload-table-wrap::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .upload-table-wrap::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        .upload-table-wrap::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--accent);
+            background: rgba(0,212,255,0.08);
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.08em;
+            margin-top: 16px;
+        }
+
+        .btn-download:hover {
+            background: rgba(0,212,255,0.15);
+            box-shadow: 0 0 20px rgba(0,212,255,0.2);
+        }
+
+        .upload-error {
+            color: var(--danger);
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .upload-error.visible { display: block; }
+
         /* ─── RESPONSIVE ─── */
         @media (max-width: 1100px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .charts-row { grid-template-columns: 1fr; }
             .predict-grid { grid-template-columns: 1fr; }
+            .upload-area { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 768px) {
@@ -863,6 +1136,9 @@
             <div class="nav-label">Detection</div>
             <a class="nav-item" onclick="showSection('predict')">
                 <span class="nav-icon">🔍</span> Live Predict
+            </a>
+            <a class="nav-item" onclick="showSection('upload')">
+                <span class="nav-icon">📁</span> Upload Dataset
             </a>
             <a class="nav-item" onclick="showSection('traffic')">
                 <span class="nav-icon">🌐</span> Traffic Monitor
@@ -1104,6 +1380,107 @@
                                     <div class="result-metric-value" id="result-time" style="color:var(--warn)">—</div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════ UPLOAD DATASET ═══════════════ -->
+            <div id="section-upload" class="section-panel">
+                <div class="page-heading">Upload <span class="hl">Dataset</span></div>
+                <div class="page-sub">Upload a CSV dataset to run batch threat detection using the RF+PSO model. Get predictions for every row instantly.</div>
+
+                <div class="upload-area">
+                    <div class="upload-zone-card">
+                        <h3 style="font-size:14px;font-weight:700;margin-bottom:20px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono)">
+                            📁 Upload CSV File
+                        </h3>
+                        <div class="upload-dropzone" id="upload-dropzone"
+                             ondrop="handleDrop(event)" ondragover="handleDragOver(event)"
+                             ondragleave="handleDragLeave(event)" onclick="document.getElementById('file-input').click()">
+                            <div class="upload-dropzone-icon">📂</div>
+                            <div class="upload-dropzone-title">Drag & drop your CSV file here</div>
+                            <div class="upload-dropzone-sub">or click to browse files<br>Maximum file size: 16 MB · CSV format only</div>
+                        </div>
+                        <input type="file" id="file-input" accept=".csv" style="display:none" onchange="handleFileSelect(event)">
+
+                        <div class="upload-file-info" id="upload-file-info">
+                            <span class="upload-file-icon">📄</span>
+                            <span class="upload-file-name" id="upload-file-name">—</span>
+                            <span class="upload-file-size" id="upload-file-size">—</span>
+                            <button class="upload-file-remove" onclick="clearFile(event)" title="Remove file">✕</button>
+                        </div>
+
+                        <div class="upload-error" id="upload-error"></div>
+
+                        <button class="btn-upload" id="upload-btn" onclick="uploadDataset()" disabled>
+                            📊 Analyze Dataset
+                        </button>
+                    </div>
+
+                    <div class="upload-results-card">
+                        <h3 style="font-size:14px;font-weight:700;margin-bottom:20px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono)">
+                            🎯 Analysis Results
+                        </h3>
+                        <div class="upload-results-placeholder" id="upload-placeholder">
+                            <div class="result-icon-large">📊</div>
+                            <p style="font-family:var(--font-mono);font-size:11px;line-height:1.8">Upload a CSV dataset<br>to see batch prediction results<br>from the RF+PSO model</p>
+                        </div>
+                        <div id="upload-results-content" style="display:none">
+                            <div class="upload-summary-grid">
+                                <div class="upload-summary-card">
+                                    <div class="upload-summary-label">Total Rows</div>
+                                    <div class="upload-summary-value" id="upload-total" style="color:var(--accent)">—</div>
+                                </div>
+                                <div class="upload-summary-card">
+                                    <div class="upload-summary-label">Threats Detected</div>
+                                    <div class="upload-summary-value" id="upload-threats" style="color:var(--danger)">—</div>
+                                </div>
+                                <div class="upload-summary-card">
+                                    <div class="upload-summary-label">Safe Traffic</div>
+                                    <div class="upload-summary-value" id="upload-safe" style="color:var(--accent3)">—</div>
+                                </div>
+                                <div class="upload-summary-card">
+                                    <div class="upload-summary-label">Processing Time</div>
+                                    <div class="upload-summary-value" id="upload-time" style="color:var(--warn)">—</div>
+                                </div>
+                            </div>
+
+                            <div class="threat-dist-section">
+                                <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px">Threat Distribution</div>
+                                <div id="upload-distribution"></div>
+                            </div>
+
+                            <button class="btn-download" onclick="downloadResultsCSV()">
+                                ⬇ Download Results as CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full results table -->
+                <div id="upload-table-section" style="display:none;margin-top:24px">
+                    <div class="results-card">
+                        <div class="results-header">
+                            <div class="results-title">📋 Row-by-Row Predictions</div>
+                            <span class="badge badge-accent" id="upload-table-count">0 rows</span>
+                        </div>
+                        <div class="upload-table-wrap">
+                            <table class="traffic-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Timestamp</th>
+                                        <th>Source IP</th>
+                                        <th>Dest IP</th>
+                                        <th>Protocol</th>
+                                        <th>Threat Type</th>
+                                        <th>Confidence</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="upload-table-body"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1412,6 +1789,173 @@ function renderAll() {
     renderDashboard();
     renderFullResults();
     renderCharts();
+}
+
+// ─── UPLOAD DATASET ───
+let selectedFile = null;
+let uploadResultsData = null;
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    document.getElementById('upload-dropzone').classList.add('drag-over');
+}
+
+function handleDragLeave(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    document.getElementById('upload-dropzone').classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    document.getElementById('upload-dropzone').classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0) setFile(files[0]);
+}
+
+function handleFileSelect(e) {
+    if (e.target.files.length > 0) setFile(e.target.files[0]);
+}
+
+function setFile(file) {
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+        showUploadError('Please upload a CSV file only.');
+        return;
+    }
+    if (file.size > 16 * 1024 * 1024) {
+        showUploadError('File size exceeds 16 MB limit.');
+        return;
+    }
+    selectedFile = file;
+    hideUploadError();
+    document.getElementById('upload-file-name').textContent = file.name;
+    const sizeKB = (file.size / 1024).toFixed(1);
+    document.getElementById('upload-file-size').textContent = sizeKB > 1024 ? (file.size / 1048576).toFixed(2) + ' MB' : sizeKB + ' KB';
+    document.getElementById('upload-file-info').classList.add('visible');
+    document.getElementById('upload-btn').disabled = false;
+}
+
+function clearFile(e) {
+    if (e) e.stopPropagation();
+    selectedFile = null;
+    document.getElementById('file-input').value = '';
+    document.getElementById('upload-file-info').classList.remove('visible');
+    document.getElementById('upload-btn').disabled = true;
+    hideUploadError();
+}
+
+function showUploadError(msg) {
+    const el = document.getElementById('upload-error');
+    el.textContent = '⚠ ' + msg;
+    el.classList.add('visible');
+}
+
+function hideUploadError() {
+    document.getElementById('upload-error').classList.remove('visible');
+}
+
+async function uploadDataset() {
+    if (!selectedFile) return;
+    const btn = document.getElementById('upload-btn');
+    btn.classList.add('loading');
+    btn.innerHTML = '<span class="spinner"></span> Analyzing…';
+    btn.disabled = true;
+    hideUploadError();
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    try {
+        const res = await fetch('/api/upload-dataset', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+
+        if (data.error) {
+            showUploadError(data.error);
+        } else {
+            renderUploadResults(data);
+        }
+    } catch(e) {
+        showUploadError('Upload failed: ' + e.message);
+    }
+
+    btn.classList.remove('loading');
+    btn.innerHTML = '📊 Analyze Dataset';
+    btn.disabled = false;
+}
+
+function renderUploadResults(data) {
+    uploadResultsData = data;
+    document.getElementById('upload-placeholder').style.display = 'none';
+    document.getElementById('upload-results-content').style.display = 'block';
+    document.getElementById('upload-table-section').style.display = 'block';
+
+    // Summary
+    document.getElementById('upload-total').textContent = data.total_rows.toLocaleString();
+    document.getElementById('upload-threats').textContent = data.threats_detected.toLocaleString();
+    document.getElementById('upload-safe').textContent = data.safe_traffic.toLocaleString();
+    document.getElementById('upload-time').textContent = data.processing_time_ms + ' ms';
+    document.getElementById('upload-table-count').textContent = data.total_rows + ' rows';
+
+    // Threat distribution
+    const distEl = document.getElementById('upload-distribution');
+    distEl.innerHTML = '';
+    const distColors = {
+        'DDoS': '#ef4444', 'Ransomware': '#f59e0b', 'Normal': '#10b981',
+        'SQL Injection': '#8b5cf6', 'Port Scan': '#06b6d4', 'Man-in-the-Middle': '#ec4899',
+        'Brute Force': '#f97316', 'Unknown': '#64748b'
+    };
+    const maxCount = Math.max(...Object.values(data.threat_distribution));
+    Object.entries(data.threat_distribution).sort((a,b) => b[1]-a[1]).forEach(([type, count]) => {
+        const pct = ((count / data.total_rows) * 100).toFixed(1);
+        const barW = ((count / maxCount) * 100).toFixed(1);
+        const color = distColors[type] || '#64748b';
+        distEl.innerHTML += `
+        <div class="threat-dist-row">
+            <div class="threat-dist-label" style="color:${color}">${type}</div>
+            <div class="threat-dist-bar">
+                <div class="threat-dist-fill" style="width:${barW}%;background:${color}">${count}</div>
+            </div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);width:45px;text-align:right">${pct}%</div>
+        </div>`;
+    });
+
+    // Results table
+    const tbody = document.getElementById('upload-table-body');
+    tbody.innerHTML = '';
+    data.results.forEach(r => {
+        const isThreat = r.is_threat;
+        tbody.innerHTML += `
+        <tr>
+            <td style="color:var(--text-muted)">${r.row}</td>
+            <td>${r.timestamp || '—'}</td>
+            <td style="color:var(--accent3)">${r.source_ip || '—'}</td>
+            <td style="color:var(--accent)">${r.dest_ip || '—'}</td>
+            <td>${r.protocol || '—'}</td>
+            <td>${r.threat_type}</td>
+            <td style="color:${isThreat ? 'var(--danger)' : 'var(--accent3)'}">${(r.confidence*100).toFixed(1)}%</td>
+            <td><span class="threat-chip ${isThreat ? 'danger' : 'safe'}">${isThreat ? 'THREAT' : 'SAFE'}</span></td>
+        </tr>`;
+    });
+}
+
+function downloadResultsCSV() {
+    if (!uploadResultsData) return;
+    let csv = 'Row,Timestamp,Source_IP,Dest_IP,Protocol,Threat_Type,Confidence,Status\n';
+    uploadResultsData.results.forEach(r => {
+        csv += `${r.row},${r.timestamp||''},${r.source_ip||''},${r.dest_ip||''},${r.protocol||''},${r.threat_type},${(r.confidence*100).toFixed(1)}%,${r.is_threat?'THREAT':'SAFE'}\n`;
+    });
+    const blob = new Blob([csv], {type: 'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'prediction_results_' + (uploadResultsData.filename || 'output') + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
 }
 
 // ─── INIT ───

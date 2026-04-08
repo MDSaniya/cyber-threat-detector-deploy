@@ -4,6 +4,8 @@ Flask backend with ML models for real-time threat classification
 """
 
 from flask import Flask, render_template, request, jsonify
+from werkzeug.utils import secure_filename
+import io
 import pandas as pd
 import numpy as np
 import os
@@ -27,6 +29,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'cyberfeddefender-secret-2024')
 app.config['ENV'] = os.environ.get('FLASK_ENV', 'development')
 app.config['DEBUG'] = os.environ.get('DEBUG', 'False').lower() == 'true'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload
 
 # ─────────────────────────────────────────────────────────────
 # LOAD TRAINED MODEL
@@ -194,6 +197,121 @@ def api_predict():
 
         result = real_prediction(features)
         return jsonify(result)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/upload-dataset', methods=['POST'])
+def api_upload_dataset():
+    """Upload a CSV dataset and run batch predictions on all rows"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({"error": "No file uploaded"}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No file selected"}), 400
+
+        filename = secure_filename(file.filename)
+        if not filename.lower().endswith('.csv'):
+            return jsonify({"error": "Only CSV files are supported"}), 400
+
+        # Read CSV
+        try:
+            stream = io.StringIO(file.stream.read().decode('utf-8'))
+            df = pd.read_csv(stream)
+        except Exception as e:
+            return jsonify({"error": f"Failed to parse CSV: {str(e)}"}), 400
+
+        if df.empty:
+            return jsonify({"error": "The uploaded CSV file is empty"}), 400
+
+        if not model_loaded or model is None:
+            return jsonify({"error": "Model not loaded. Please train the model first."}), 500
+
+        start_time = time.time()
+
+        # Preprocess: encode categorical columns using saved encoders
+        df_proc = df.copy()
+        for col in df_proc.select_dtypes(include='object').columns:
+            if col in encoders:
+                le = encoders[col]
+                # Map known labels; unknown labels get 0
+                df_proc[col] = df_proc[col].apply(
+                    lambda x: le.transform([x])[0] if x in le.classes_ else 0
+                )
+            else:
+                # Drop columns not in encoders and not in feature names
+                if col not in loaded_feature_names:
+                    df_proc.drop(columns=[col], inplace=True)
+
+        # Extract features in correct order
+        missing_features = [f for f in loaded_feature_names if f not in df_proc.columns]
+        if missing_features:
+            return jsonify({
+                "error": f"Missing required columns: {', '.join(missing_features)}"
+            }), 400
+
+        X = df_proc[loaded_feature_names].values
+
+        # Handle any NaN values
+        X = np.nan_to_num(X, nan=0.0)
+
+        # Scale
+        X_scaled = scaler.transform(X)
+
+        # Predict
+        predictions = model.predict(X_scaled)
+        probabilities = model.predict_proba(X_scaled)
+
+        processing_time = (time.time() - start_time) * 1000  # ms
+
+        # Build results
+        results = []
+        threat_counts = {}
+        threats_detected = 0
+
+        for i in range(len(predictions)):
+            pred_idx = int(predictions[i])
+            threat_type = THREAT_TYPES[pred_idx] if pred_idx < len(THREAT_TYPES) else "Unknown"
+            confidence = float(max(probabilities[i]))
+            is_threat = threat_type != "Normal"
+
+            if is_threat:
+                threats_detected += 1
+
+            threat_counts[threat_type] = threat_counts.get(threat_type, 0) + 1
+
+            row_data = {
+                "row": i + 1,
+                "threat_type": threat_type,
+                "confidence": round(confidence, 3),
+                "is_threat": is_threat,
+            }
+
+            # Include original identifying columns if present
+            if 'Source_IP' in df.columns:
+                row_data["source_ip"] = str(df.iloc[i]['Source_IP'])
+            if 'Destination_IP' in df.columns:
+                row_data["dest_ip"] = str(df.iloc[i]['Destination_IP'])
+            if 'Protocol' in df.columns:
+                row_data["protocol"] = str(df.iloc[i]['Protocol'])
+            if 'Timestamp' in df.columns:
+                row_data["timestamp"] = str(df.iloc[i]['Timestamp'])
+
+            results.append(row_data)
+
+        return jsonify({
+            "success": True,
+            "filename": filename,
+            "total_rows": len(predictions),
+            "threats_detected": threats_detected,
+            "safe_traffic": len(predictions) - threats_detected,
+            "processing_time_ms": int(processing_time),
+            "threat_distribution": threat_counts,
+            "results": results
+        })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
