@@ -10,6 +10,7 @@ import os
 import json
 import time
 import random
+import joblib
 
 # Load environment variables from .env file (if it exists)
 try:
@@ -28,9 +29,34 @@ app.config['ENV'] = os.environ.get('FLASK_ENV', 'development')
 app.config['DEBUG'] = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # ─────────────────────────────────────────────────────────────
-# SIMULATED MODEL RESULTS (replace with real trained model)
-# In production, load your trained model via joblib/pickle
+# LOAD TRAINED MODEL
 # ─────────────────────────────────────────────────────────────
+MODEL_DIR = 'models'
+MODEL_PATH = os.path.join(MODEL_DIR, 'rf_pso_model.pkl')
+SCALER_PATH = os.path.join(MODEL_DIR, 'scaler.pkl')
+ENCODERS_PATH = os.path.join(MODEL_DIR, 'label_encoders.pkl')
+FEATURE_NAMES_PATH = os.path.join(MODEL_DIR, 'feature_names.pkl')
+
+model = None
+scaler = None
+encoders = None
+loaded_feature_names = None
+model_loaded = False
+
+if os.path.exists(MODEL_PATH):
+    try:
+        model = joblib.load(MODEL_PATH)
+        scaler = joblib.load(SCALER_PATH)
+        encoders = joblib.load(ENCODERS_PATH)
+        loaded_feature_names = joblib.load(FEATURE_NAMES_PATH)
+        model_loaded = True
+        print("✅ Real ML model loaded successfully")
+    except Exception as e:
+        print(f"⚠️  Failed to load model: {e}")
+        model_loaded = False
+else:
+    print("⚠️  Model files not found. Run 'python train_model.py' first.")
+    print("   Using simulated predictions until model is trained.")
 
 ALGORITHM_RESULTS = {
     "KNN": {
@@ -76,22 +102,54 @@ FEATURE_NAMES = [
 ]
 
 
+def real_prediction(features: dict) -> dict:
+    """
+    Real prediction using the trained Random Forest + PSO model.
+    Uses actual ML inference on submitted features.
+    """
+    start_time = time.time()
+    
+    if not model_loaded or model is None:
+        # Fallback to simulation if model not loaded
+        return simulate_prediction(features)
+    
+    try:
+        # Convert features dict to list in correct feature order
+        feature_values = [features.get(fname, 0) for fname in loaded_feature_names]
+        feature_array = np.array([feature_values])
+        
+        # Scale features
+        scaled_features = scaler.transform(feature_array)
+        
+        # Get prediction and confidence
+        prediction = model.predict(scaled_features)[0]
+        prediction_proba = model.predict_proba(scaled_features)[0]
+        confidence = float(max(prediction_proba))
+        
+        # Map prediction to threat type
+        threat_type = THREAT_TYPES[int(prediction)] if int(prediction) < len(THREAT_TYPES) else "Unknown"
+        is_threat = threat_type != "Normal"
+        
+        processing_time = (time.time() - start_time) * 1000  # Convert to ms
+        
+        return {
+            "threat_type": threat_type,
+            "is_threat": is_threat,
+            "confidence": round(confidence, 3),
+            "model_used": "RF + PSO (Real Model)",
+            "accuracy": 0.985,
+            "processing_time_ms": int(processing_time)
+        }
+    except Exception as e:
+        print(f"Prediction error: {e}")
+        return simulate_prediction(features)
+
+
 def simulate_prediction(features: dict) -> dict:
     """
-    Simulate prediction using the best model (RF + PSO).
-    Replace this with your actual trained model inference.
+    Fallback simulation when model is not available.
     """
-    # Simulate processing time
     time.sleep(0.5)
-
-    # In production: load model and predict
-    # model = joblib.load('models/rf_pso_model.pkl')
-    # scaler = joblib.load('models/scaler.pkl')
-    # scaled = scaler.transform([list(features.values())])
-    # prediction = model.predict(scaled)[0]
-    # confidence = max(model.predict_proba(scaled)[0])
-
-    # Simulated result
     threat_idx = random.randint(0, len(THREAT_TYPES) - 1)
     confidence = round(random.uniform(0.87, 0.99), 3)
     is_threat = THREAT_TYPES[threat_idx] != "Normal"
@@ -100,7 +158,7 @@ def simulate_prediction(features: dict) -> dict:
         "threat_type": THREAT_TYPES[threat_idx],
         "is_threat": is_threat,
         "confidence": confidence,
-        "model_used": "RF + PSO",
+        "model_used": "RF + PSO (Simulated)",
         "accuracy": 0.985,
         "processing_time_ms": random.randint(45, 120)
     }
@@ -134,7 +192,7 @@ def api_predict():
         if not features:
             return jsonify({"error": "No features provided"}), 400
 
-        result = simulate_prediction(features)
+        result = real_prediction(features)
         return jsonify(result)
 
     except Exception as e:
