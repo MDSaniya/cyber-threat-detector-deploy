@@ -4,8 +4,8 @@ __pycache__/
 *.pyo
 *.pyd
 .env
-models/*.pkl
-*.csv
+# models/*.pkl
+# *.csv
 .DS_Store
 *.egg-info/
 dist/
