@@ -1,0 +1,67 @@
+2026-04-08 15:22:06,637 - pyswarms.single.global_best - INFO - Optimize for 5 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.9}
+2026-04-08 15:22:09,473 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 0.4405594405594405, best pos: [54.08143735 32.35173941]
+2026-04-08 15:41:11,602 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 15:41:11,606 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 15:58:31,355 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:31] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:31,382 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:31] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:43,746 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:43] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:43,766 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:43] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:44,788 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:44] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:44,803 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:44] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:45,094 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:45] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:45,111 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:45] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:45,163 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:45] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:45,187 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:45] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:45,695 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:45] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:45,713 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:45] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:45,977 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:45] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:46,001 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:46,024 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:46,049 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:46,818 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:46,830 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:46,847 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:46,874 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:46,946 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:46,970 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:46] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:47,302 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:47] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:47,316 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:47] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:47,354 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:47] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:47,376 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:47] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:48,088 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:48] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:48,105 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:48] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:58:48,158 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:48] "GET / HTTP/1.1" 200 -
+2026-04-08 15:58:48,175 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:58:48] "GET /api/results HTTP/1.1" 200 -
+2026-04-08 15:59:11,249 - werkzeug - INFO - 172.17.151.65 - - [08/Apr/2026 15:59:11] "[31m[1mPOST /api/upload-dataset HTTP/1.1[0m" 400 -
+2026-04-08 16:11:21,245 - werkzeug - INFO -  * Detected change in 'C:\\Users\\saniy\\Desktop\\major project\\cyber-threat-detector-deploy\\app.py', reloading
+2026-04-08 16:11:23,379 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 16:11:23,383 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 16:11:44,102 - werkzeug - INFO -  * Detected change in 'C:\\Users\\saniy\\Desktop\\major project\\cyber-threat-detector-deploy\\app.py', reloading
+2026-04-08 16:11:46,231 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 16:11:46,235 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 16:14:13,827 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 16:14:13,827 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 16:14:13,829 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 16:14:15,584 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 16:14:15,587 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 16:14:21,572 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 16:14:21] "GET / HTTP/1.1" 200 -
+2026-04-08 16:14:22,278 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 16:14:22] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-04-08 16:15:27,882 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 16:15:27] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-04-08 16:16:51,927 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 16:16:51] "POST /api/compare-models HTTP/1.1" 200 -
+2026-04-08 16:19:15,407 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 16:19:15] "POST /api/compare-models HTTP/1.1" 200 -
+2026-04-08 16:41:21,073 - werkzeug - INFO -  * Detected change in 'C:\\Users\\saniy\\Desktop\\major project\\cyber-threat-detector-deploy\\app.py', reloading
+2026-04-08 16:41:21,388 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 16:41:23,394 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 16:41:23,399 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 16:47:31,716 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 16:47:31,717 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 16:47:31,718 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 16:47:33,672 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 16:47:33,676 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 16:48:09,302 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 16:48:09] "GET / HTTP/1.1" 200 -

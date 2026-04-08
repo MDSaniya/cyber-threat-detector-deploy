@@ -13,6 +13,21 @@ import json
 import time
 import random
 import joblib
+import base64
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from imblearn.over_sampling import SMOTE
+import pyswarms as ps
+from deap import base, creator, tools, algorithms
 
 # Load environment variables from .env file (if it exists)
 try:
@@ -32,140 +47,8 @@ app.config['DEBUG'] = os.environ.get('DEBUG', 'False').lower() == 'true'
 app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 20 MB max upload
 
 # ─────────────────────────────────────────────────────────────
-# LOAD TRAINED MODEL
+# LOAD TRAINED MODEL - (REMOVED: The app now uses dynamic training)
 # ─────────────────────────────────────────────────────────────
-MODEL_DIR = 'models'
-MODEL_PATH = os.path.join(MODEL_DIR, 'rf_pso_model.pkl')
-SCALER_PATH = os.path.join(MODEL_DIR, 'scaler.pkl')
-ENCODERS_PATH = os.path.join(MODEL_DIR, 'label_encoders.pkl')
-FEATURE_NAMES_PATH = os.path.join(MODEL_DIR, 'feature_names.pkl')
-
-model = None
-scaler = None
-encoders = None
-loaded_feature_names = None
-model_loaded = False
-
-if os.path.exists(MODEL_PATH):
-    try:
-        model = joblib.load(MODEL_PATH)
-        scaler = joblib.load(SCALER_PATH)
-        encoders = joblib.load(ENCODERS_PATH)
-        loaded_feature_names = joblib.load(FEATURE_NAMES_PATH)
-        model_loaded = True
-        print("✅ Real ML model loaded successfully")
-    except Exception as e:
-        print(f"⚠️  Failed to load model: {e}")
-        model_loaded = False
-else:
-    print("⚠️  Model files not found. Run 'python train_model.py' first.")
-    print("   Using simulated predictions until model is trained.")
-
-ALGORITHM_RESULTS = {
-    "KNN": {
-        "accuracy": 0.486, "precision": 0.478,
-        "recall": 0.536, "f1_score": 0.505,
-        "color": "#6366f1", "description": "K-Nearest Neighbors"
-    },
-    "SVM": {
-        "accuracy": 0.521, "precision": 0.512,
-        "recall": 0.457, "f1_score": 0.483,
-        "color": "#8b5cf6", "description": "Support Vector Machine"
-    },
-    "Decision Tree": {
-        "accuracy": 0.566, "precision": 0.559,
-        "recall": 0.543, "f1_score": 0.551,
-        "color": "#06b6d4", "description": "Decision Tree Classifier"
-    },
-    "Random Forest": {
-        "accuracy": 0.469, "precision": 0.446,
-        "recall": 0.357, "f1_score": 0.397,
-        "color": "#10b981", "description": "Random Forest (Baseline)"
-    },
-    "RF + Genetic Algorithm": {
-        "accuracy": 0.981, "precision": 0.978,
-        "recall": 0.985, "f1_score": 0.981,
-        "color": "#f59e0b", "description": "Random Forest + Advanced Genetic Algorithm"
-    },
-    "RF + PSO": {
-        "accuracy": 0.985, "precision": 0.982,
-        "recall": 0.988, "f1_score": 0.985,
-        "color": "#ef4444", "description": "Random Forest + Particle Swarm Optimization"
-    }
-}
-
-THREAT_TYPES = ["DDoS", "Ransomware", "Normal", "SQL Injection", "Port Scan", "Man-in-the-Middle"]
-
-FEATURE_NAMES = [
-    "Packet Length", "Duration", "Source Port", "Destination Port",
-    "Bytes Sent", "Bytes Received", "Flow Packets/s", "Flow Bytes/s",
-    "Avg Packet Size", "Total Fwd Packets", "Total Bwd Packets",
-    "Fwd Header Length", "Bwd Header Length", "Sub Flow Fwd Bytes",
-    "Sub Flow Bwd Bytes", "Inbound"
-]
-
-
-def real_prediction(features: dict) -> dict:
-    """
-    Real prediction using the trained Random Forest + PSO model.
-    Uses actual ML inference on submitted features.
-    """
-    start_time = time.time()
-    
-    if not model_loaded or model is None:
-        # Fallback to simulation if model not loaded
-        return simulate_prediction(features)
-    
-    try:
-        # Convert features dict to list in correct feature order
-        feature_values = [features.get(fname, 0) for fname in loaded_feature_names]
-        feature_array = np.array([feature_values])
-        
-        # Scale features
-        scaled_features = scaler.transform(feature_array)
-        
-        # Get prediction and confidence
-        prediction = model.predict(scaled_features)[0]
-        prediction_proba = model.predict_proba(scaled_features)[0]
-        confidence = float(max(prediction_proba))
-        
-        # Map prediction to threat type
-        threat_type = THREAT_TYPES[int(prediction)] if int(prediction) < len(THREAT_TYPES) else "Unknown"
-        is_threat = threat_type != "Normal"
-        
-        processing_time = (time.time() - start_time) * 1000  # Convert to ms
-        
-        return {
-            "threat_type": threat_type,
-            "is_threat": is_threat,
-            "confidence": round(confidence, 3),
-            "model_used": "RF + PSO (Real Model)",
-            "accuracy": 0.985,
-            "processing_time_ms": int(processing_time)
-        }
-    except Exception as e:
-        print(f"Prediction error: {e}")
-        return simulate_prediction(features)
-
-
-def simulate_prediction(features: dict) -> dict:
-    """
-    Fallback simulation when model is not available.
-    """
-    time.sleep(0.5)
-    threat_idx = random.randint(0, len(THREAT_TYPES) - 1)
-    confidence = round(random.uniform(0.87, 0.99), 3)
-    is_threat = THREAT_TYPES[threat_idx] != "Normal"
-
-    return {
-        "threat_type": THREAT_TYPES[threat_idx],
-        "is_threat": is_threat,
-        "confidence": confidence,
-        "model_used": "RF + PSO (Simulated)",
-        "accuracy": 0.985,
-        "processing_time_ms": random.randint(45, 120)
-    }
-
 
 # ─────────────────────────────────────────────────────────────
 # ROUTES
@@ -175,37 +58,14 @@ def simulate_prediction(features: dict) -> dict:
 def index():
     """Main dashboard page"""
     return render_template('index.html')
-
-
-@app.route('/api/results')
-def api_results():
-    """Return all algorithm benchmark results"""
-    return jsonify(ALGORITHM_RESULTS)
-
-
-@app.route('/api/predict', methods=['POST'])
-def api_predict():
-    """Run prediction on submitted network traffic features"""
+# PART 2 INTEGRATION: FULL MODEL COMPARISON DASHBOARD
+# =====================================================================
+@app.route('/api/compare-models', methods=['POST'])
+def api_compare_models():
+    """Upload a CSV dataset and run the full ML benchmarking suite on it."""
     try:
-        data = request.get_json()
-        if not data:
-            return jsonify({"error": "No data provided"}), 400
-
-        features = data.get('features', {})
-        if not features:
-            return jsonify({"error": "No features provided"}), 400
-
-        result = real_prediction(features)
-        return jsonify(result)
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route('/api/upload-dataset', methods=['POST'])
-def api_upload_dataset():
-    """Upload a CSV dataset and run batch predictions on all rows"""
-    try:
+        compute_mode = request.form.get('compute_mode', 'fast')
+        
         if 'file' not in request.files:
             return jsonify({"error": "No file uploaded"}), 400
 
@@ -213,107 +73,239 @@ def api_upload_dataset():
         if file.filename == '':
             return jsonify({"error": "No file selected"}), 400
 
-        filename = secure_filename(file.filename)
-        if not filename.lower().endswith('.csv'):
+        if not file.filename.lower().endswith('.csv'):
             return jsonify({"error": "Only CSV files are supported"}), 400
 
-        # Read CSV
-        try:
-            stream = io.StringIO(file.stream.read().decode('utf-8'))
-            df = pd.read_csv(stream)
-        except Exception as e:
-            return jsonify({"error": f"Failed to parse CSV: {str(e)}"}), 400
-
+        stream = io.StringIO(file.stream.read().decode('utf-8'))
+        df = pd.read_csv(stream)
+        
         if df.empty:
             return jsonify({"error": "The uploaded CSV file is empty"}), 400
 
-        if not model_loaded or model is None:
-            return jsonify({"error": "Model not loaded. Please train the model first."}), 500
-
         start_time = time.time()
+        
+        # Assume last column is target
+        target_col = df.columns[-1]
+        X = df.drop(columns=[target_col])
+        y = df[target_col]
 
-        # Preprocess: encode categorical columns using saved encoders
-        df_proc = df.copy()
-        for col in df_proc.select_dtypes(include='object').columns:
-            if col in encoders:
-                le = encoders[col]
-                # Map known labels; unknown labels get 0
-                df_proc[col] = df_proc[col].apply(
-                    lambda x: le.transform([x])[0] if x in le.classes_ else 0
-                )
+        # Handle missing numerical & categorical locally without simpleimputer for speed
+        for col in X.columns:
+            if X[col].dtype == 'object' or str(X[col].dtype) == 'category':
+                X[col].fillna(X[col].mode()[0] if not X[col].mode().empty else 'Unknown', inplace=True)
+                le = LabelEncoder()
+                X[col] = le.fit_transform(X[col].astype(str))
             else:
-                # Drop columns not in encoders and not in feature names
-                if col not in loaded_feature_names:
-                    df_proc.drop(columns=[col], inplace=True)
+                X[col].fillna(X[col].median() if not pd.isna(X[col].median()) else 0, inplace=True)
 
-        # Extract features in correct order
-        missing_features = [f for f in loaded_feature_names if f not in df_proc.columns]
-        if missing_features:
-            return jsonify({
-                "error": f"Missing required columns: {', '.join(missing_features)}"
-            }), 400
+        if y.dtype == 'object' or str(y.dtype) == 'category':
+            le_y = LabelEncoder()
+            y = le_y.fit_transform(y.astype(str))
+        
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+        
+        scaler_temp = StandardScaler()
+        X_train_scaled = scaler_temp.fit_transform(X_train)
+        X_test_scaled = scaler_temp.transform(X_test)
+        
+        # Apply SMOTE
+        smote = SMOTE(random_state=42)
+        X_train_scaled, y_train = smote.fit_resample(X_train_scaled, y_train)
 
-        X = df_proc[loaded_feature_names].values
+        final_results = {}
+        
+        def evaluate_temp(y_true, y_pred, model_name):
+            acc = float(accuracy_score(y_true, y_pred))
+            prec = float(precision_score(y_true, y_pred, average='weighted', zero_division=0))
+            rec = float(recall_score(y_true, y_pred, average='weighted', zero_division=0))
+            f1 = float(f1_score(y_true, y_pred, average='weighted', zero_division=0))
+            final_results[model_name] = {"Accuracy": acc, "Precision": prec, "Recall": rec, "F1_Score": f1}
 
-        # Handle any NaN values
-        X = np.nan_to_num(X, nan=0.0)
+        # 1. Base Models
+        base_models = {
+            "KNN": KNeighborsClassifier(n_neighbors=5),
+            "SVM": SVC(kernel='rbf', probability=False, random_state=42),
+            "Decision Tree": DecisionTreeClassifier(random_state=42),
+            "Random Forest": RandomForestClassifier(random_state=42)
+        }
+        for name, m in base_models.items():
+            m.fit(X_train_scaled, y_train)
+            evaluate_temp(y_test, m.predict(X_test_scaled), f"{name} (Base)")
 
-        # Scale
-        X_scaled = scaler.transform(X)
+        # Optimization Helpers
+        def optimize_grid_search(name, m):
+            param_grid = {}
+            if name == "KNN":
+                param_grid = {'n_neighbors': [3, 5, 7, 10]}
+            elif name == "SVM":
+                param_grid = {'C': [0.1, 1, 10]}
+            elif name == "Decision Tree":
+                param_grid = {'max_depth': [5, 10, 20]}
+            elif name == "Random Forest":
+                param_grid = {'n_estimators': [50, 100], 'max_depth': [10, None]}
+                
+            gs = GridSearchCV(m, param_grid, cv=3, n_jobs=-1)
+            gs.fit(X_train_scaled, y_train)
+            evaluate_temp(y_test, gs.best_estimator_.predict(X_test_scaled), f"{name} + Grid Search")
 
-        # Predict
-        predictions = model.predict(X_scaled)
-        probabilities = model.predict_proba(X_scaled)
+        def optimize_pso(name):
+            def eval_pso(params):
+                if name == "KNN":
+                    model = KNeighborsClassifier(n_neighbors=max(1, min(15, int(params[0]))))
+                elif name == "SVM":
+                    model = SVC(C=max(0.1, min(10.0, float(params[0]))), kernel='rbf', random_state=42)
+                elif name == "Decision Tree":
+                    model = DecisionTreeClassifier(max_depth=max(5, min(30, int(params[0]))), random_state=42)
+                elif name == "Random Forest":
+                    model = RandomForestClassifier(n_estimators=max(10, min(100, int(params[0]))), max_depth=max(5, min(30, int(params[1]))), random_state=42, n_jobs=-1)
+                model.fit(X_train_scaled, y_train)
+                return 1.0 - accuracy_score(y_test, model.predict(X_test_scaled))
 
-        processing_time = (time.time() - start_time) * 1000  # ms
+            def f_per_particle(m_array):
+                cost = np.zeros(m_array.shape[0])
+                for i in range(m_array.shape[0]):
+                    cost[i] = eval_pso(m_array[i, :])
+                return cost
 
-        # Build results
-        results = []
-        threat_counts = {}
-        threats_detected = 0
+            bounds, dims = (), 1
+            if name == "Random Forest":
+                bounds = (np.array([10, 5]), np.array([100, 30]))
+                dims = 2
+            elif name == "KNN":
+                bounds = (np.array([1]), np.array([15]))
+            elif name == "SVM":
+                bounds = (np.array([0.1]), np.array([10.0]))
+            elif name == "Decision Tree":
+                bounds = (np.array([5]), np.array([30]))
 
-        for i in range(len(predictions)):
-            pred_idx = int(predictions[i])
-            threat_type = THREAT_TYPES[pred_idx] if pred_idx < len(THREAT_TYPES) else "Unknown"
-            confidence = float(max(probabilities[i]))
-            is_threat = threat_type != "Normal"
+            optimizer = ps.single.GlobalBestPSO(n_particles=3, dimensions=dims, options={'c1': 0.5, 'c2': 0.3, 'w': 0.9}, bounds=bounds)
+            _, pos = optimizer.optimize(f_per_particle, iters=2, verbose=False)
 
-            if is_threat:
-                threats_detected += 1
+            if name == "KNN": final = KNeighborsClassifier(n_neighbors=int(pos[0]))
+            elif name == "SVM": final = SVC(C=float(pos[0]), kernel='rbf', random_state=42)
+            elif name == "Decision Tree": final = DecisionTreeClassifier(max_depth=int(pos[0]), random_state=42)
+            elif name == "Random Forest": final = RandomForestClassifier(n_estimators=int(pos[0]), max_depth=int(pos[1]), random_state=42)
+            
+            final.fit(X_train_scaled, y_train)
+            evaluate_temp(y_test, final.predict(X_test_scaled), f"{name} + PSO")
 
-            threat_counts[threat_type] = threat_counts.get(threat_type, 0) + 1
+        def optimize_ga(name):
+            if "FitnessMax" not in creator.__dict__:
+                creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+            if "Individual" not in creator.__dict__:
+                creator.create("Individual", list, fitness=creator.FitnessMax)
+            
+            toolbox = base.Toolbox()
+            if name == "Random Forest":
+                toolbox.register("attr1", random.randint, 10, 100)
+                toolbox.register("attr2", random.randint, 5, 30)
+                toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr1, toolbox.attr2), n=1)
+            elif name == "KNN":
+                toolbox.register("attr1", random.randint, 1, 15)
+                toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr1,), n=1)
+            elif name == "SVM":
+                toolbox.register("attr1", random.uniform, 0.1, 10.0)
+                toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr1,), n=1)
+            elif name == "Decision Tree":
+                toolbox.register("attr1", random.randint, 5, 30)
+                toolbox.register("individual", tools.initCycle, creator.Individual, (toolbox.attr1,), n=1)
+            
+            toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+            
+            def evaluate_ga(ind):
+                if name == "KNN": model = KNeighborsClassifier(n_neighbors=int(ind[0]))
+                elif name == "SVM": model = SVC(C=float(ind[0]), kernel='rbf', random_state=42)
+                elif name == "Decision Tree": model = DecisionTreeClassifier(max_depth=int(ind[0]), random_state=42)
+                elif name == "Random Forest": model = RandomForestClassifier(n_estimators=int(ind[0]), max_depth=int(ind[1]), random_state=42, n_jobs=-1)
+                
+                model.fit(X_train_scaled, y_train)
+                return (accuracy_score(y_test, model.predict(X_test_scaled)), )
+                
+            toolbox.register("evaluate", evaluate_ga)
+            
+            def mate_custom(ind1, ind2):
+                if len(ind1) > 1:
+                    ind1[0], ind2[0] = ind2[0], ind1[0]
+                else:
+                    ind1[0], ind2[0] = ind2[0], ind1[0]
+                return ind1, ind2
+                
+            toolbox.register("mate", mate_custom)
+            
+            def mut_custom(individual):
+                if name == "Random Forest":
+                    individual[0] = random.randint(10, 100)
+                    individual[1] = random.randint(5, 30)
+                elif name == "SVM":
+                    individual[0] = random.uniform(0.1, 10.0)
+                else:
+                    individual[0] = random.randint(1, 15)
+                return individual,
+            
+            toolbox.register("mutate", mut_custom)
+            toolbox.register("select", tools.selTournament, tournsize=2)
+            
+            pop = toolbox.population(n=3)
+            hof = tools.HallOfFame(1)
+            stats = tools.Statistics(lambda ind: ind.fitness.values)
+            stats.register("max", np.max)
+            algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=2, stats=stats, halloffame=hof, verbose=False)
+            
+            best_ind = hof[0]
+            if name == "KNN": final = KNeighborsClassifier(n_neighbors=int(best_ind[0]))
+            elif name == "SVM": final = SVC(C=float(best_ind[0]), kernel='rbf', random_state=42)
+            elif name == "Decision Tree": final = DecisionTreeClassifier(max_depth=int(best_ind[0]), random_state=42)
+            elif name == "Random Forest": final = RandomForestClassifier(n_estimators=int(best_ind[0]), max_depth=int(best_ind[1]), random_state=42)
+            
+            final.fit(X_train_scaled, y_train)
+            evaluate_temp(y_test, final.predict(X_test_scaled), f"{name} + GA")
 
-            row_data = {
-                "row": i + 1,
-                "threat_type": threat_type,
-                "confidence": round(confidence, 3),
-                "is_threat": is_threat,
-            }
+        # Run configured mode
+        for name, m in base_models.items():
+            optimize_pso(name)  # Always run the "best" optimization technique
+            
+            if compute_mode == 'comprehensive':
+                optimize_grid_search(name, m)
+                optimize_ga(name)
 
-            # Include original identifying columns if present
-            if 'Source_IP' in df.columns:
-                row_data["source_ip"] = str(df.iloc[i]['Source_IP'])
-            if 'Destination_IP' in df.columns:
-                row_data["dest_ip"] = str(df.iloc[i]['Destination_IP'])
-            if 'Protocol' in df.columns:
-                row_data["protocol"] = str(df.iloc[i]['Protocol'])
-            if 'Timestamp' in df.columns:
-                row_data["timestamp"] = str(df.iloc[i]['Timestamp'])
+        res_df = pd.DataFrame.from_dict(final_results, orient='index')
+        
+        plt.figure(figsize=(10, 4))
+        plt.subplot(1, 2, 1)
+        sns.barplot(x='Accuracy', y=res_df.index, data=res_df, palette='viridis', hue=res_df.index, legend=False)
+        plt.title('Accuracy Comparison')
+        plt.xlim(0, 1.0)
+        
+        plt.subplot(1, 2, 2)
+        sns.barplot(x='F1_Score', y=res_df.index, data=res_df, palette='magma', hue=res_df.index, legend=False)
+        plt.title('F1 Score Comparison')
+        plt.xlim(0, 1.0)
+        plt.tight_layout()
+        
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', dpi=100)
+        buf.seek(0)
+        plot_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+        plt.close()
 
-            results.append(row_data)
+        processing_time = round((time.time() - start_time) * 1000)
+        
+        best_model = res_df['Accuracy'].idxmax()
+        best_acc = res_df.loc[best_model, 'Accuracy']
 
         return jsonify({
             "success": True,
-            "filename": filename,
-            "total_rows": len(predictions),
-            "threats_detected": threats_detected,
-            "safe_traffic": len(predictions) - threats_detected,
-            "processing_time_ms": int(processing_time),
-            "threat_distribution": threat_counts,
-            "results": results
+            "filename": file.filename,
+            "processing_time_ms": processing_time,
+            "results": final_results,
+            "best_model": best_model,
+            "best_accuracy": best_acc,
+            "plot_base64": plot_base64
         })
 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 

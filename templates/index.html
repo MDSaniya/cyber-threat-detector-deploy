@@ -147,6 +147,12 @@
             border-color: rgba(0,212,255,0.2);
         }
 
+        .nav-item[data-target="section-compare"].active {
+            background: rgba(255,165,0,0.08);
+            color: #ffb74d;
+            border-color: rgba(255,165,0,0.2);
+        }
+
         .nav-icon { font-size: 15px; }
 
         .sidebar-footer {
@@ -1122,26 +1128,9 @@
         </div>
 
         <div class="sidebar-nav">
-            <div class="nav-label">Analytics</div>
-            <a class="nav-item active" onclick="showSection('dashboard')">
-                <span class="nav-icon">📊</span> Dashboard
-            </a>
-            <a class="nav-item" onclick="showSection('results')">
-                <span class="nav-icon">🏆</span> Model Results
-            </a>
-            <a class="nav-item" onclick="showSection('charts')">
-                <span class="nav-icon">📈</span> Performance Charts
-            </a>
-
-            <div class="nav-label">Detection</div>
-            <a class="nav-item" onclick="showSection('predict')">
-                <span class="nav-icon">🔍</span> Live Predict
-            </a>
-            <a class="nav-item" onclick="showSection('upload')">
-                <span class="nav-icon">📁</span> Upload Dataset
-            </a>
-            <a class="nav-item" onclick="showSection('traffic')">
-                <span class="nav-icon">🌐</span> Traffic Monitor
+            <div class="nav-label">Main AI Tool</div>
+            <a class="nav-item active" onclick="showSection('compare')">
+                <span class="nav-icon">🚀</span> Dataset Analyzer & Models
             </a>
 
             <div class="nav-label">Info</div>
@@ -1176,344 +1165,142 @@
         <!-- PAGE CONTENT -->
         <div class="page-content">
 
-            <!-- ═══════════════ DASHBOARD ═══════════════ -->
-            <div id="section-dashboard" class="section-panel active">
-                <div class="page-heading">System <span class="hl">Overview</span></div>
-                <div class="page-sub">Real-time cyber threat detection using machine learning ensemble models with PSO optimization.</div>
+            <!-- ═══════════════ UNIFIED MODEL APP ═══════════════ -->
 
-                <div class="stats-grid">
-                    <div class="stat-card fade-in">
-                        <div class="stat-label">Best Accuracy</div>
-                        <div class="stat-value" id="stat-accuracy" style="color:var(--accent)">98.5%</div>
-                        <div class="stat-sub">RF + PSO Algorithm</div>
-                    </div>
-                    <div class="stat-card fade-in">
-                        <div class="stat-label">Dataset Samples</div>
-                        <div class="stat-value" id="stat-samples" style="color:var(--accent3)">1,430</div>
-                        <div class="stat-sub">Network traffic records</div>
-                    </div>
-                    <div class="stat-card fade-in">
-                        <div class="stat-label">Algorithms Tested</div>
-                        <div class="stat-value" id="stat-algos" style="color:var(--warn)">6</div>
-                        <div class="stat-sub">KNN · SVM · DT · RF · GA · PSO</div>
-                    </div>
-                    <div class="stat-card fade-in">
-                        <div class="stat-label">Threat Classes</div>
-                        <div class="stat-value" id="stat-threats" style="color:var(--accent2)">6</div>
-                        <div class="stat-sub">DDoS, Ransomware, Normal…</div>
-                    </div>
-                </div>
-
-                <!-- Quick results preview -->
-                <div class="results-card">
-                    <div class="results-header">
-                        <div class="results-title">🏆 Algorithm Ranking — Quick View</div>
-                        <span class="badge badge-accent">Best: RF+PSO</span>
-                    </div>
-                    <table class="results-table" id="dashboard-table">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Algorithm</th>
-                                <th>Accuracy</th>
-                                <th>F1 Score</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dashboard-table-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ═══════════════ MODEL RESULTS ═══════════════ -->
-            <div id="section-results" class="section-panel">
-                <div class="page-heading">Model <span class="hl">Benchmarks</span></div>
-                <div class="page-sub">Complete performance comparison across all 6 algorithms with 4 evaluation metrics each.</div>
-
-                <div class="results-card">
-                    <div class="results-header">
-                        <div class="results-title">Full Performance Comparison</div>
-                        <span class="tooltip-text">Higher is better for all metrics</span>
-                    </div>
-                    <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Algorithm</th>
-                                <th>Accuracy</th>
-                                <th>Precision</th>
-                                <th>Recall</th>
-                                <th>F1 Score</th>
-                            </tr>
-                        </thead>
-                        <tbody id="full-results-table-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ═══════════════ CHARTS ═══════════════ -->
-            <div id="section-charts" class="section-panel">
-                <div class="page-heading">Performance <span class="hl">Visualization</span></div>
-                <div class="page-sub">Visual breakdown of algorithm performance across all key metrics.</div>
-
-                <div class="charts-row">
-                    <div class="chart-card">
-                        <div class="chart-title">📊 Accuracy Comparison (%)</div>
-                        <div class="bar-chart" id="accuracy-chart"></div>
-                    </div>
-                    <div class="chart-card">
-                        <div class="chart-title">🎯 F1 Score Comparison (%)</div>
-                        <div class="bar-chart" id="f1-chart"></div>
-                    </div>
-                </div>
-
-                <div class="charts-row">
-                    <div class="chart-card">
-                        <div class="chart-title">📡 Precision Comparison (%)</div>
-                        <div class="bar-chart" id="precision-chart"></div>
-                    </div>
-                    <div class="chart-card">
-                        <div class="chart-title">🔁 Recall Comparison (%)</div>
-                        <div class="bar-chart" id="recall-chart"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ═══════════════ PREDICT ═══════════════ -->
-            <div id="section-predict" class="section-panel">
-                <div class="page-heading">Live <span class="hl">Prediction</span></div>
-                <div class="page-sub">Enter network traffic features to classify the traffic and detect potential cyber threats using the RF+PSO model.</div>
-
-                <div class="predict-grid">
-                    <div class="predict-form-card">
-                        <h3 style="font-size:14px;font-weight:700;margin-bottom:20px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono)">
-                            📡 Network Traffic Features
-                        </h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">Packet Length</label>
-                                <input class="form-input" type="number" id="f-packet-length" placeholder="e.g. 1155" value="1155">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Duration (s)</label>
-                                <input class="form-input" type="number" id="f-duration" placeholder="e.g. 4.01" value="4.01" step="0.01">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Source Port</label>
-                                <input class="form-input" type="number" id="f-src-port" placeholder="e.g. 53" value="53">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Dest Port</label>
-                                <input class="form-input" type="number" id="f-dst-port" placeholder="e.g. 80" value="80">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Bytes Sent</label>
-                                <input class="form-input" type="number" id="f-bytes-sent" placeholder="e.g. 675" value="675">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Bytes Received</label>
-                                <input class="form-input" type="number" id="f-bytes-recv" placeholder="e.g. 877" value="877">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Flow Packets/s</label>
-                                <input class="form-input" type="number" id="f-flow-pkts" placeholder="e.g. 12.5" value="12.5" step="0.1">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Flow Bytes/s</label>
-                                <input class="form-input" type="number" id="f-flow-bytes" placeholder="e.g. 380.0" value="380.0" step="0.1">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Avg Packet Size</label>
-                                <input class="form-input" type="number" id="f-avg-pkt" placeholder="e.g. 512" value="512">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Total Fwd Packets</label>
-                                <input class="form-input" type="number" id="f-fwd-pkts" placeholder="e.g. 21" value="21">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Total Bwd Packets</label>
-                                <input class="form-input" type="number" id="f-bwd-pkts" placeholder="e.g. 34" value="34">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Inbound (0/1)</label>
-                                <input class="form-input" type="number" id="f-inbound" placeholder="0 or 1" value="1" min="0" max="1">
-                            </div>
-                        </div>
-                        <button class="btn-predict" id="predict-btn" onclick="runPrediction()">
-                            🔍 Analyze Traffic
-                        </button>
-                    </div>
-
-                    <div class="result-card">
-                        <h3 style="font-size:14px;font-weight:700;margin-bottom:20px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono)">
-                            🎯 Prediction Result
-                        </h3>
-                        <div class="result-placeholder" id="result-placeholder">
-                            <div class="result-icon-large">🛡️</div>
-                            <p>Submit network traffic features<br>on the left to get a prediction<br>from the RF+PSO model</p>
-                        </div>
-                        <div class="result-output" id="result-output">
-                            <div class="threat-status" id="threat-status-box">
-                                <div class="threat-icon" id="threat-icon">⚠️</div>
-                                <div>
-                                    <div class="threat-label">Threat Classification</div>
-                                    <div class="threat-value" id="threat-value">—</div>
-                                </div>
-                            </div>
-                            <div class="result-metrics">
-                                <div class="result-metric">
-                                    <div class="result-metric-label">Confidence</div>
-                                    <div class="result-metric-value" id="result-confidence" style="color:var(--accent)">—</div>
-                                    <div class="confidence-bar">
-                                        <div class="confidence-fill" id="confidence-fill" style="width:0%"></div>
-                                    </div>
-                                </div>
-                                <div class="result-metric">
-                                    <div class="result-metric-label">Model Used</div>
-                                    <div class="result-metric-value" style="color:var(--accent2);font-size:14px;" id="result-model">RF+PSO</div>
-                                </div>
-                                <div class="result-metric">
-                                    <div class="result-metric-label">Model Accuracy</div>
-                                    <div class="result-metric-value" id="result-acc" style="color:var(--accent3)">98.5%</div>
-                                </div>
-                                <div class="result-metric">
-                                    <div class="result-metric-label">Processing Time</div>
-                                    <div class="result-metric-value" id="result-time" style="color:var(--warn)">—</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ═══════════════ UPLOAD DATASET ═══════════════ -->
-            <div id="section-upload" class="section-panel">
-                <div class="page-heading">Upload <span class="hl">Dataset</span></div>
-                <div class="page-sub">Upload a CSV dataset to run batch threat detection using the RF+PSO model. Get predictions for every row instantly.</div>
+            <!-- ═══════════════ MODEL COMPARISON ═══════════════ -->
+            <div id="section-compare" class="section-panel active">
+                <div class="page-heading">Model <span class="hl" style="color:#ffb74d">Comparison</span></div>
+                <div class="page-sub">Run the full ML suite (Decision Trees, SVM, Random Forest + Grid Search / PSO / Genetic Algorithms) on your dataset.</div>
 
                 <div class="upload-area">
-                    <div class="upload-zone-card">
-                        <h3 style="font-size:14px;font-weight:700;margin-bottom:20px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono)">
-                            📁 Upload CSV File
-                        </h3>
-                        <div class="upload-dropzone" id="upload-dropzone"
-                             ondrop="handleDrop(event)" ondragover="handleDragOver(event)"
-                             ondragleave="handleDragLeave(event)" onclick="document.getElementById('file-input').click()">
-                            <div class="upload-dropzone-icon">📂</div>
-                            <div class="upload-dropzone-title">Drag & drop your CSV file here</div>
-                            <div class="upload-dropzone-sub">or click to browse files<br>Maximum file size: 20 MB · CSV format only</div>
-                        </div>
-                        <input type="file" id="file-input" accept=".csv" style="display:none" onchange="handleFileSelect(event)">
-
-                        <div class="upload-file-info" id="upload-file-info">
-                            <span class="upload-file-icon">📄</span>
-                            <span class="upload-file-name" id="upload-file-name">—</span>
-                            <span class="upload-file-size" id="upload-file-size">—</span>
-                            <button class="upload-file-remove" onclick="clearFile(event)" title="Remove file">✕</button>
-                        </div>
-
-                        <div class="upload-error" id="upload-error"></div>
-
-                        <button class="btn-upload" id="upload-btn" onclick="uploadDataset()" disabled>
-                            📊 Analyze Dataset
-                        </button>
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Compute Framework</label>
+                        <select id="compute-mode" style="width:100%; padding: 10px; background:var(--surface2); border: 1px solid var(--border); border-radius: 6px; color:var(--text); margin-top: 8px;">
+                            <option value="fast">🌩️ Fast Mode (Render / Cloud) - Best Optimizer</option>
+                            <option value="comprehensive">🔬 Comprehensive Mode (Local) - All Optimizers</option>
+                        </select>
                     </div>
-
-                    <div class="upload-results-card">
+                    <div class="upload-zone-card" style="flex:1;max-width:100%">
                         <h3 style="font-size:14px;font-weight:700;margin-bottom:20px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono)">
-                            🎯 Analysis Results
+                            🔬 Upload Dataset & Run Benchmarks
                         </h3>
-                        <div class="upload-results-placeholder" id="upload-placeholder">
-                            <div class="result-icon-large">📊</div>
-                            <p style="font-family:var(--font-mono);font-size:11px;line-height:1.8">Upload a CSV dataset<br>to see batch prediction results<br>from the RF+PSO model</p>
+                        <div class="upload-dropzone" id="compare-dropzone"
+                             ondrop="handleCompareDrop(event)" ondragover="handleCompareDragOver(event)"
+                             ondragleave="handleCompareDragLeave(event)" onclick="document.getElementById('compare-file-input').click()">
+                            <div class="upload-dropzone-icon">⚙️</div>
+                            <div class="upload-dropzone-title">Drag & drop your CSV file here</div>
+                            <div class="upload-dropzone-sub">Click to browse files (Runs in ~20 seconds)</div>
                         </div>
-                        <div id="upload-results-content" style="display:none">
-                            <div class="upload-summary-grid">
-                                <div class="upload-summary-card">
-                                    <div class="upload-summary-label">Total Rows</div>
-                                    <div class="upload-summary-value" id="upload-total" style="color:var(--accent)">—</div>
-                                </div>
-                                <div class="upload-summary-card">
-                                    <div class="upload-summary-label">Threats Detected</div>
-                                    <div class="upload-summary-value" id="upload-threats" style="color:var(--danger)">—</div>
-                                </div>
-                                <div class="upload-summary-card">
-                                    <div class="upload-summary-label">Safe Traffic</div>
-                                    <div class="upload-summary-value" id="upload-safe" style="color:var(--accent3)">—</div>
-                                </div>
-                                <div class="upload-summary-card">
-                                    <div class="upload-summary-label">Processing Time</div>
-                                    <div class="upload-summary-value" id="upload-time" style="color:var(--warn)">—</div>
-                                </div>
-                            </div>
-
-                            <div class="threat-dist-section">
-                                <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px">Threat Distribution</div>
-                                <div id="upload-distribution"></div>
-                            </div>
-
-                            <button class="btn-download" onclick="downloadResultsCSV()">
-                                ⬇ Download Results as CSV
-                            </button>
+                        <input type="file" id="compare-file-input" accept=".csv" style="display:none" onchange="handleCompareFileSelect(event)">
+                        
+                        <div class="upload-file-info" id="compare-file-info">
+                            <span class="upload-file-icon">📄</span>
+                            <span class="upload-file-name" id="compare-file-name">—</span>
+                            <button class="upload-file-remove" onclick="clearCompareFile(event)" title="Remove file">✕</button>
                         </div>
+                        <div class="upload-error" id="compare-error"></div>
+                        <button class="btn-upload" id="compare-btn" onclick="runComparison()" disabled>
+                            🚀 Run Full Comparison
+                        </button>
                     </div>
                 </div>
 
-                <!-- Full results table -->
-                <div id="upload-table-section" style="display:none;margin-top:24px">
-                    <div class="results-card">
-                        <div class="results-header">
-                            <div class="results-title">📋 Row-by-Row Predictions</div>
-                            <span class="badge badge-accent" id="upload-table-count">0 rows</span>
-                        </div>
-                        <div class="upload-table-wrap">
+                <div id="compare-results-section" style="display:none;margin-top:24px">
+                    <div style="display:grid;grid-template-columns:1fr;gap:24px;">
+                        <!-- Comparison Table -->
+                        <div class="results-card">
+                            <div class="results-header">
+                                <div class="results-title">📋 Comprehensive Metrics</div>
+                                <span class="badge badge-accent" id="compare-time"></span>
+                            </div>
                             <table class="traffic-table">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Timestamp</th>
-                                        <th>Source IP</th>
-                                        <th>Dest IP</th>
-                                        <th>Protocol</th>
-                                        <th>Threat Type</th>
-                                        <th>Confidence</th>
+                                        <th>Model Name</th>
+                                        <th>Accuracy</th>
+                                        <th>Precision</th>
+                                        <th>Recall</th>
+                                        <th>F1 Score</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody id="upload-table-body"></tbody>
+                                <tbody id="compare-table-body"></tbody>
                             </table>
+                        </div>
+
+                        <!-- Bar Charts -->
+                        <div class="results-card">
+                            <div class="results-header"><div class="results-title">📈 Metric Visualizations</div></div>
+                            <div style="text-align:center;padding:10px;">
+                                <img id="compare-plots" src="" alt="Comparison Plots" style="max-width:100%;border-radius:8px;">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ═══════════════ TRAFFIC MONITOR ═══════════════ -->
-            <div id="section-traffic" class="section-panel">
-                <div class="page-heading">Traffic <span class="hl">Monitor</span></div>
-                <div class="page-sub">Simulated network traffic analysis showing real-time threat detection output.</div>
+            <!-- ═══════════════ MODEL COMPARISON ═══════════════ -->
+            <div id="section-compare" class="section-panel">
+                <div class="page-heading">Model <span class="hl">Comparison</span></div>
+                <div class="page-sub">Run the full ML suite (Decision Trees, SVM, Random Forest + Grid Search / PSO / Genetic Algorithms) on your dataset.</div>
 
-                <div class="results-card">
-                    <div class="results-header">
-                        <div class="results-title">🌐 Live Traffic Analysis</div>
-                        <button class="btn-refresh" onclick="loadTraffic()">⟳ Refresh</button>
+                <div class="upload-area">
+                    <div class="upload-zone-card" style="flex:1;max-width:100%">
+                        <h3 style="font-size:14px;font-weight:700;margin-bottom:20px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono)">
+                            🔬 Upload Dataset & Run Benchmarks
+                        </h3>
+                        <div class="upload-dropzone" id="compare-dropzone"
+                             ondrop="handleCompareDrop(event)" ondragover="handleCompareDragOver(event)"
+                             ondragleave="handleCompareDragLeave(event)" onclick="document.getElementById('compare-file-input').click()">
+                            <div class="upload-dropzone-icon">⚙️</div>
+                            <div class="upload-dropzone-title">Drag & drop your CSV file here</div>
+                            <div class="upload-dropzone-sub">Click to browse files (Runs in ~20 seconds)</div>
+                        </div>
+                        <input type="file" id="compare-file-input" accept=".csv" style="display:none" onchange="handleCompareFileSelect(event)">
+                        
+                        <div class="upload-file-info" id="compare-file-info">
+                            <span class="upload-file-icon">📄</span>
+                            <span class="upload-file-name" id="compare-file-name">—</span>
+                            <button class="upload-file-remove" onclick="clearCompareFile(event)" title="Remove file">✕</button>
+                        </div>
+                        <div class="upload-error" id="compare-error"></div>
+                        <button class="btn-upload" id="compare-btn" onclick="runComparison()" disabled>
+                            🚀 Run Full Comparison
+                        </button>
                     </div>
-                    <div style="padding: 0 0 8px">
-                        <table class="traffic-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Timestamp</th>
-                                    <th>Source IP</th>
-                                    <th>Dest IP</th>
-                                    <th>Protocol</th>
-                                    <th>Threat Type</th>
-                                    <th>Confidence</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="traffic-table-body">
-                                <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">Loading traffic data…</td></tr>
-                            </tbody>
-                        </table>
+                </div>
+
+                <div id="compare-results-section" style="display:none;margin-top:24px">
+                    <div style="display:grid;grid-template-columns:1fr;gap:24px;">
+                        
+                        <!-- Comparison Table -->
+                        <div class="results-card">
+                            <div class="results-header">
+                                <div class="results-title">📋 Comprehensive Metrics</div>
+                                <span class="badge badge-accent" id="compare-time"></span>
+                            </div>
+                            <table class="traffic-table">
+                                <thead>
+                                    <tr>
+                                        <th>Model Name</th>
+                                        <th>Accuracy</th>
+                                        <th>Precision</th>
+                                        <th>Recall</th>
+                                        <th>F1 Score</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="compare-table-body"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- Bar Charts -->
+                        <div class="results-card">
+                            <div class="results-header"><div class="results-title">📈 Metric Visualizations</div></div>
+                            <div style="text-align:center;padding:10px;">
+                                <img id="compare-plots" src="" alt="Comparison Plots" style="max-width:100%;border-radius:8px;">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1578,388 +1365,95 @@
 </div><!-- /app-wrapper -->
 
 <script>
-// ─── DATA ───
-let algorithmData = {};
 
-// ─── FETCH DATA ───
-async function fetchData() {
-    try {
-        const res = await fetch('/api/results');
-        algorithmData = await res.json();
-        renderAll();
-    } catch(e) {
-        console.error('Failed to fetch data', e);
-    }
+
+// ─── MODEL COMPARISON INTEGRATION ───
+let compareFile = null;
+
+function handleCompareDragOver(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('compare-dropzone').classList.add('drag-over'); }
+function handleCompareDragLeave(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('compare-dropzone').classList.remove('drag-over'); }
+function handleCompareDrop(e) {
+    e.preventDefault(); e.stopPropagation(); document.getElementById('compare-dropzone').classList.remove('drag-over');
+    if (e.dataTransfer.files.length > 0) setCompareFile(e.dataTransfer.files[0]);
+}
+function handleCompareFileSelect(e) {
+    if (e.target.files.length > 0) setCompareFile(e.target.files[0]);
 }
 
-// ─── SECTION NAV ───
-function showSection(name) {
-    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('section-' + name).classList.add('active');
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(n => {
-        if(n.getAttribute('onclick') && n.getAttribute('onclick').includes(name)) {
-            n.classList.add('active');
-        }
-    });
-    if(name === 'traffic') loadTraffic();
-    if(name === 'charts') renderCharts();
+function setCompareFile(file) {
+    if (!file.name.toLowerCase().endsWith('.csv')) { showCompareError('CSV only'); return; }
+    compareFile = file;
+    hideCompareError();
+    document.getElementById('compare-file-name').textContent = file.name;
+    document.getElementById('compare-file-info').classList.add('visible');
+    document.getElementById('compare-btn').disabled = false;
 }
 
-// ─── SORT BY ACCURACY ───
-function getSorted() {
-    return Object.entries(algorithmData).sort((a,b) => b[1].accuracy - a[1].accuracy);
-}
-
-// ─── RENDER DASHBOARD TABLE ───
-function renderDashboard() {
-    const sorted = getSorted();
-    const tbody = document.getElementById('dashboard-table-body');
-    tbody.innerHTML = '';
-    sorted.forEach(([name, data], i) => {
-        const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-other';
-        tbody.innerHTML += `
-        <tr>
-            <td><span class="rank-badge ${rankClass}">${i+1}</span></td>
-            <td><div class="algo-name">
-                <div class="algo-dot" style="background:${data.color}"></div>
-                ${name}
-            </div></td>
-            <td>
-                <div class="metric-bar-wrap">
-                    <div class="metric-bar"><div class="metric-bar-fill" style="width:${data.accuracy*100}%;background:${data.color}"></div></div>
-                    <div class="metric-val">${(data.accuracy*100).toFixed(1)}%</div>
-                </div>
-            </td>
-            <td>
-                <div class="metric-bar-wrap">
-                    <div class="metric-bar"><div class="metric-bar-fill" style="width:${data.f1_score*100}%;background:${data.color}"></div></div>
-                    <div class="metric-val">${(data.f1_score*100).toFixed(1)}%</div>
-                </div>
-            </td>
-        </tr>`;
-    });
-}
-
-// ─── RENDER FULL RESULTS ───
-function renderFullResults() {
-    const sorted = getSorted();
-    const tbody = document.getElementById('full-results-table-body');
-    tbody.innerHTML = '';
-    sorted.forEach(([name, data], i) => {
-        const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-other';
-        tbody.innerHTML += `
-        <tr>
-            <td><span class="rank-badge ${rankClass}">${i+1}</span></td>
-            <td><div class="algo-name">
-                <div class="algo-dot" style="background:${data.color}"></div>
-                <div>
-                    <div>${name}</div>
-                    <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono)">${data.description}</div>
-                </div>
-            </div></td>
-            <td><div class="metric-bar-wrap">
-                <div class="metric-bar"><div class="metric-bar-fill" style="width:${data.accuracy*100}%;background:${data.color}"></div></div>
-                <div class="metric-val" style="color:${data.color}">${(data.accuracy*100).toFixed(1)}%</div>
-            </div></td>
-            <td><div class="metric-bar-wrap">
-                <div class="metric-bar"><div class="metric-bar-fill" style="width:${data.precision*100}%;background:${data.color}"></div></div>
-                <div class="metric-val">${(data.precision*100).toFixed(1)}%</div>
-            </div></td>
-            <td><div class="metric-bar-wrap">
-                <div class="metric-bar"><div class="metric-bar-fill" style="width:${data.recall*100}%;background:${data.color}"></div></div>
-                <div class="metric-val">${(data.recall*100).toFixed(1)}%</div>
-            </div></td>
-            <td><div class="metric-bar-wrap">
-                <div class="metric-bar"><div class="metric-bar-fill" style="width:${data.f1_score*100}%;background:${data.color}"></div></div>
-                <div class="metric-val">${(data.f1_score*100).toFixed(1)}%</div>
-            </div></td>
-        </tr>`;
-    });
-}
-
-// ─── RENDER CHARTS ───
-function renderCharts() {
-    const sorted = getSorted();
-    const metrics = ['accuracy', 'f1_score', 'precision', 'recall'];
-    const ids = ['accuracy-chart', 'f1-chart', 'precision-chart', 'recall-chart'];
-
-    metrics.forEach((metric, mi) => {
-        const el = document.getElementById(ids[mi]);
-        el.innerHTML = '';
-        sorted.forEach(([name, data]) => {
-            const val = (data[metric] * 100).toFixed(1);
-            el.innerHTML += `
-            <div class="bar-row">
-                <div class="bar-label" title="${name}">${name}</div>
-                <div class="bar-track">
-                    <div class="bar-fill" style="width:${val}%;background:${data.color};">${val}%</div>
-                </div>
-            </div>`;
-        });
-    });
-}
-
-// ─── LOAD TRAFFIC ───
-async function loadTraffic() {
-    const tbody = document.getElementById('traffic-table-body');
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">Loading…</td></tr>';
-    try {
-        const res = await fetch('/api/simulate-traffic');
-        const traffic = await res.json();
-        tbody.innerHTML = '';
-        traffic.forEach(t => {
-            const isThreat = t.is_threat;
-            tbody.innerHTML += `
-            <tr>
-                <td style="color:var(--text-muted)">${t.id}</td>
-                <td>${t.timestamp}</td>
-                <td style="color:var(--accent3)">${t.source_ip}</td>
-                <td style="color:var(--accent)">${t.dest_ip}</td>
-                <td>${t.protocol}</td>
-                <td>${t.threat_type}</td>
-                <td style="color:${isThreat ? 'var(--danger)' : 'var(--accent3)'}">${(t.confidence*100).toFixed(1)}%</td>
-                <td><span class="threat-chip ${isThreat ? 'danger' : 'safe'}">${isThreat ? 'THREAT' : 'SAFE'}</span></td>
-            </tr>`;
-        });
-    } catch(e) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--danger)">Error loading data</td></tr>';
-    }
-}
-
-// ─── PREDICTION ───
-async function runPrediction() {
-    const btn = document.getElementById('predict-btn');
-    btn.classList.add('loading');
-    btn.innerHTML = '<span class="spinner"></span> Analyzing…';
-
-    const features = {
-        packet_length: parseFloat(document.getElementById('f-packet-length').value) || 0,
-        duration: parseFloat(document.getElementById('f-duration').value) || 0,
-        source_port: parseFloat(document.getElementById('f-src-port').value) || 0,
-        dest_port: parseFloat(document.getElementById('f-dst-port').value) || 0,
-        bytes_sent: parseFloat(document.getElementById('f-bytes-sent').value) || 0,
-        bytes_received: parseFloat(document.getElementById('f-bytes-recv').value) || 0,
-        flow_packets_s: parseFloat(document.getElementById('f-flow-pkts').value) || 0,
-        flow_bytes_s: parseFloat(document.getElementById('f-flow-bytes').value) || 0,
-        avg_packet_size: parseFloat(document.getElementById('f-avg-pkt').value) || 0,
-        total_fwd_packets: parseFloat(document.getElementById('f-fwd-pkts').value) || 0,
-        total_bwd_packets: parseFloat(document.getElementById('f-bwd-pkts').value) || 0,
-        inbound: parseFloat(document.getElementById('f-inbound').value) || 0,
-    };
-
-    try {
-        const res = await fetch('/api/predict', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ features })
-        });
-        const result = await res.json();
-        showResult(result);
-    } catch(e) {
-        alert('Prediction failed: ' + e.message);
-    }
-
-    btn.classList.remove('loading');
-    btn.innerHTML = '🔍 Analyze Traffic';
-}
-
-function showResult(result) {
-    document.getElementById('result-placeholder').style.display = 'none';
-    const output = document.getElementById('result-output');
-    output.style.display = 'block';
-
-    const isThreat = result.is_threat;
-    const box = document.getElementById('threat-status-box');
-    box.className = 'threat-status ' + (isThreat ? 'danger' : 'safe');
-    document.getElementById('threat-icon').textContent = isThreat ? '⚠️' : '✅';
-    document.getElementById('threat-value').textContent = result.threat_type;
-
-    const conf = (result.confidence * 100).toFixed(1);
-    document.getElementById('result-confidence').textContent = conf + '%';
-    document.getElementById('confidence-fill').style.width = conf + '%';
-    document.getElementById('result-model').textContent = result.model_used;
-    document.getElementById('result-acc').textContent = (result.accuracy * 100).toFixed(1) + '%';
-    document.getElementById('result-time').textContent = result.processing_time_ms + ' ms';
-}
-
-// ─── RENDER ALL ───
-function renderAll() {
-    renderDashboard();
-    renderFullResults();
-    renderCharts();
-}
-
-// ─── UPLOAD DATASET ───
-let selectedFile = null;
-let uploadResultsData = null;
-
-function handleDragOver(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    document.getElementById('upload-dropzone').classList.add('drag-over');
-}
-
-function handleDragLeave(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    document.getElementById('upload-dropzone').classList.remove('drag-over');
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    document.getElementById('upload-dropzone').classList.remove('drag-over');
-    const files = e.dataTransfer.files;
-    if (files.length > 0) setFile(files[0]);
-}
-
-function handleFileSelect(e) {
-    if (e.target.files.length > 0) setFile(e.target.files[0]);
-}
-
-function setFile(file) {
-    if (!file.name.toLowerCase().endsWith('.csv')) {
-        showUploadError('Please upload a CSV file only.');
-        return;
-    }
-    if (file.size > 20 * 1024 * 1024) {
-        showUploadError('File size exceeds 20 MB limit.');
-        return;
-    }
-    selectedFile = file;
-    hideUploadError();
-    document.getElementById('upload-file-name').textContent = file.name;
-    const sizeKB = (file.size / 1024).toFixed(1);
-    document.getElementById('upload-file-size').textContent = sizeKB > 1024 ? (file.size / 1048576).toFixed(2) + ' MB' : sizeKB + ' KB';
-    document.getElementById('upload-file-info').classList.add('visible');
-    document.getElementById('upload-btn').disabled = false;
-}
-
-function clearFile(e) {
+function clearCompareFile(e) {
     if (e) e.stopPropagation();
-    selectedFile = null;
-    document.getElementById('file-input').value = '';
-    document.getElementById('upload-file-info').classList.remove('visible');
-    document.getElementById('upload-btn').disabled = true;
-    hideUploadError();
+    compareFile = null;
+    document.getElementById('compare-file-input').value = '';
+    document.getElementById('compare-file-info').classList.remove('visible');
+    document.getElementById('compare-btn').disabled = true;
+    hideCompareError();
 }
 
-function showUploadError(msg) {
-    const el = document.getElementById('upload-error');
-    el.textContent = '⚠ ' + msg;
-    el.classList.add('visible');
+function showCompareError(msg) {
+    const el = document.getElementById('compare-error');
+    el.textContent = '⚠ ' + msg; el.classList.add('visible');
 }
+function hideCompareError() { document.getElementById('compare-error').classList.remove('visible'); }
 
-function hideUploadError() {
-    document.getElementById('upload-error').classList.remove('visible');
-}
-
-async function uploadDataset() {
-    if (!selectedFile) return;
-    const btn = document.getElementById('upload-btn');
+async function runComparison() {
+    if (!compareFile) return;
+    const btn = document.getElementById('compare-btn');
     btn.classList.add('loading');
-    btn.innerHTML = '<span class="spinner"></span> Analyzing…';
+    btn.innerHTML = '<span class="spinner"></span> Running Pipeline (takes ~20s)…';
     btn.disabled = true;
-    hideUploadError();
+    hideCompareError();
 
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    formData.append('file', compareFile);
+    formData.append('compute_mode', document.getElementById('compute-mode').value);
 
     try {
-        const res = await fetch('/api/upload-dataset', {
-            method: 'POST',
-            body: formData
-        });
+        const res = await fetch('/api/compare-models', { method: 'POST', body: formData });
         const data = await res.json();
-
+        
         if (data.error) {
-            showUploadError(data.error);
+            showCompareError(data.error);
         } else {
-            renderUploadResults(data);
+            document.getElementById('compare-results-section').style.display = 'block';
+            document.getElementById('compare-time').textContent = 'Time: ' + data.processing_time_ms + 'ms';
+            
+            // Fill Table
+            const tbody = document.getElementById('compare-table-body');
+            tbody.innerHTML = '';
+            Object.entries(data.results).sort((a,b) => b[1].Accuracy - a[1].Accuracy).forEach(([name, metrics]) => {
+                const isBest = name === data.best_model;
+                tbody.innerHTML += `
+                <tr>
+                    <td style="font-weight:${isBest?'bold':'normal'};color:${isBest?'var(--accent)':'inherit'}">${name}</td>
+                    <td style="color:${isBest?'var(--accent)':'inherit'}">${(metrics.Accuracy*100).toFixed(2)}%</td>
+                    <td>${(metrics.Precision*100).toFixed(2)}%</td>
+                    <td>${(metrics.Recall*100).toFixed(2)}%</td>
+                    <td>${(metrics.F1_Score*100).toFixed(2)}%</td>
+                    <td>${isBest ? '<span class="badge badge-accent">🏆 BEST</span>' : ''}</td>
+                </tr>`;
+            });
+            
+            // Display Chart Image
+            document.getElementById('compare-plots').src = 'data:image/png;base64,' + data.plot_base64;
         }
     } catch(e) {
-        showUploadError('Upload failed: ' + e.message);
+        showCompareError('Comparison failed: ' + e.message);
     }
 
     btn.classList.remove('loading');
-    btn.innerHTML = '📊 Analyze Dataset';
+    btn.innerHTML = '🚀 Run Full Comparison';
     btn.disabled = false;
 }
 
-function renderUploadResults(data) {
-    uploadResultsData = data;
-    document.getElementById('upload-placeholder').style.display = 'none';
-    document.getElementById('upload-results-content').style.display = 'block';
-    document.getElementById('upload-table-section').style.display = 'block';
-
-    // Summary
-    document.getElementById('upload-total').textContent = data.total_rows.toLocaleString();
-    document.getElementById('upload-threats').textContent = data.threats_detected.toLocaleString();
-    document.getElementById('upload-safe').textContent = data.safe_traffic.toLocaleString();
-    document.getElementById('upload-time').textContent = data.processing_time_ms + ' ms';
-    document.getElementById('upload-table-count').textContent = data.total_rows + ' rows';
-
-    // Threat distribution
-    const distEl = document.getElementById('upload-distribution');
-    distEl.innerHTML = '';
-    const distColors = {
-        'DDoS': '#ef4444', 'Ransomware': '#f59e0b', 'Normal': '#10b981',
-        'SQL Injection': '#8b5cf6', 'Port Scan': '#06b6d4', 'Man-in-the-Middle': '#ec4899',
-        'Brute Force': '#f97316', 'Unknown': '#64748b'
-    };
-    const maxCount = Math.max(...Object.values(data.threat_distribution));
-    Object.entries(data.threat_distribution).sort((a,b) => b[1]-a[1]).forEach(([type, count]) => {
-        const pct = ((count / data.total_rows) * 100).toFixed(1);
-        const barW = ((count / maxCount) * 100).toFixed(1);
-        const color = distColors[type] || '#64748b';
-        distEl.innerHTML += `
-        <div class="threat-dist-row">
-            <div class="threat-dist-label" style="color:${color}">${type}</div>
-            <div class="threat-dist-bar">
-                <div class="threat-dist-fill" style="width:${barW}%;background:${color}">${count}</div>
-            </div>
-            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);width:45px;text-align:right">${pct}%</div>
-        </div>`;
-    });
-
-    // Results table
-    const tbody = document.getElementById('upload-table-body');
-    tbody.innerHTML = '';
-    data.results.forEach(r => {
-        const isThreat = r.is_threat;
-        tbody.innerHTML += `
-        <tr>
-            <td style="color:var(--text-muted)">${r.row}</td>
-            <td>${r.timestamp || '—'}</td>
-            <td style="color:var(--accent3)">${r.source_ip || '—'}</td>
-            <td style="color:var(--accent)">${r.dest_ip || '—'}</td>
-            <td>${r.protocol || '—'}</td>
-            <td>${r.threat_type}</td>
-            <td style="color:${isThreat ? 'var(--danger)' : 'var(--accent3)'}">${(r.confidence*100).toFixed(1)}%</td>
-            <td><span class="threat-chip ${isThreat ? 'danger' : 'safe'}">${isThreat ? 'THREAT' : 'SAFE'}</span></td>
-        </tr>`;
-    });
-}
-
-function downloadResultsCSV() {
-    if (!uploadResultsData) return;
-    let csv = 'Row,Timestamp,Source_IP,Dest_IP,Protocol,Threat_Type,Confidence,Status\n';
-    uploadResultsData.results.forEach(r => {
-        csv += `${r.row},${r.timestamp||''},${r.source_ip||''},${r.dest_ip||''},${r.protocol||''},${r.threat_type},${(r.confidence*100).toFixed(1)}%,${r.is_threat?'THREAT':'SAFE'}\n`;
-    });
-    const blob = new Blob([csv], {type: 'text/csv'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'prediction_results_' + (uploadResultsData.filename || 'output') + '.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-}
-
-// ─── INIT ───
-fetchData();
 </script>
 </body>
 </html>
