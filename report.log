@@ -91,3 +91,61 @@
 2026-04-08 17:44:48,844 - werkzeug - INFO -  * Restarting with stat
 2026-04-08 17:44:50,660 - werkzeug - WARNING -  * Debugger is active!
 2026-04-08 17:44:50,664 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 17:59:01,738 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 17:59:01,738 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 17:59:01,740 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 17:59:03,453 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 17:59:03,457 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 17:59:08,821 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 17:59:08] "GET / HTTP/1.1" 200 -
+2026-04-08 17:59:23,107 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 17:59:23] "POST /api/compare-models HTTP/1.1" 200 -
+2026-04-08 18:00:06,168 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 18:00:06] "POST /api/compare-models HTTP/1.1" 200 -
+2026-04-08 18:02:00,889 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 18:02:00] "GET / HTTP/1.1" 200 -
+2026-04-08 18:31:23,787 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 18:31:23,789 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 18:31:23,791 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 18:31:25,542 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 18:31:25,545 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 18:33:20,657 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 18:33:20] "GET / HTTP/1.1" 200 -
+2026-04-08 18:41:16,661 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 18:41:16] "GET / HTTP/1.1" 200 -
+2026-04-08 18:50:43,532 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 18:50:43,532 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 18:50:43,534 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 18:50:45,266 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 18:50:45,269 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 18:51:02,363 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 18:51:02] "GET / HTTP/1.1" 200 -
+2026-04-08 18:58:50,303 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 18:58:50,304 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 18:58:50,305 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 18:58:52,044 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 18:58:52,047 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 18:59:05,273 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 18:59:05] "GET / HTTP/1.1" 200 -
+2026-04-08 19:11:08,442 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 19:11:08,443 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 19:11:08,445 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 19:11:10,189 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 19:11:10,192 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 19:11:15,796 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:11:15] "GET / HTTP/1.1" 200 -
+2026-04-08 19:20:13,802 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 19:20:13,802 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 19:20:13,804 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 19:20:15,552 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 19:20:15,555 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 19:20:17,889 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:20:17] "GET / HTTP/1.1" 200 -
