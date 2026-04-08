@@ -28,6 +28,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from imblearn.over_sampling import SMOTE
 import pyswarms as ps
 from deap import base, creator, tools, algorithms
+from sklearn.feature_selection import SelectKBest, f_classif
 
 # Load environment variables from .env file (if it exists)
 try:
@@ -94,10 +95,11 @@ def api_compare_models():
         if df.empty:
             return jsonify({"error": "The uploaded CSV file is empty"}), 400
 
-        # Downsample extremely large datasets to avoid computational freeze
-        sample_size = 5000 if compute_mode == 'comprehensive' else 2500
+        # Aggressive downsampling for Render/Cloud stability (RAM/Timeout limits)
+        sample_size = 1500 if compute_mode == 'comprehensive' else 800
         if len(df) > sample_size:
             df = df.sample(n=sample_size, random_state=42)
+            print(f"DEBUG: Downsampled to {sample_size} rows for stability")
 
         start_time = time.time()
         
@@ -130,7 +132,17 @@ def api_compare_models():
                 
         # One-hot encode remaining low-cardinality columns
         X = pd.get_dummies(X)
-        print(f"DEBUG: Dataset expanded to {X.shape[1]} features after encoding")
+        
+        # Aggressive Feature Selection to prevent RAM exhaustion and timeout
+        max_features = 20
+        if X.shape[1] > max_features:
+            print(f"DEBUG: Pruning feature space from {X.shape[1]} to {max_features}")
+            selector = SelectKBest(f_classif, k=max_features)
+            # Use fillna(0) just in case get_dummies produced any NaNs
+            X_clean = X.fillna(0)
+            X = pd.DataFrame(selector.fit_transform(X_clean, y), columns=X.columns[selector.get_support()])
+
+        print(f"DEBUG: Dataset ready with {X.shape[1]} features")
 
         if y.dtype == 'object' or str(y.dtype) == 'category':
             le_y = LabelEncoder()
@@ -221,8 +233,9 @@ def api_compare_models():
             elif name == "Decision Tree":
                 bounds = (np.array([5]), np.array([30]))
 
-            optimizer = ps.single.GlobalBestPSO(n_particles=3, dimensions=dims, options={'c1': 0.5, 'c2': 0.3, 'w': 0.9}, bounds=bounds)
-            _, pos = optimizer.optimize(f_per_particle, iters=2, verbose=False)
+            # Minimal particles/iters to fit in Render 120s window
+            optimizer = ps.single.GlobalBestPSO(n_particles=2, dimensions=dims, options={'c1': 0.5, 'c2': 0.3, 'w': 0.9}, bounds=bounds)
+            _, pos = optimizer.optimize(f_per_particle, iters=1, verbose=False)
 
             if name == "KNN": final = KNeighborsClassifier(n_neighbors=int(pos[0]))
             elif name == "SVM": final = SVC(C=float(pos[0]), kernel='rbf', random_state=42)
@@ -288,11 +301,11 @@ def api_compare_models():
             toolbox.register("mutate", mut_custom)
             toolbox.register("select", tools.selTournament, tournsize=2)
             
-            pop = toolbox.population(n=3)
+            pop = toolbox.population(n=2)
             hof = tools.HallOfFame(1)
             stats = tools.Statistics(lambda ind: ind.fitness.values)
             stats.register("max", np.max)
-            algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=2, stats=stats, halloffame=hof, verbose=False)
+            algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=1, stats=stats, halloffame=hof, verbose=False)
             
             best_ind = hof[0]
             if name == "KNN": final = KNeighborsClassifier(n_neighbors=int(best_ind[0]))

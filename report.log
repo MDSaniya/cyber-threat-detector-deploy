@@ -175,3 +175,16 @@
 2026-04-08 19:54:45,922 - werkzeug - INFO -  * Debugger PIN: 138-630-429
 2026-04-08 19:54:54,781 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:54:54] "GET / HTTP/1.1" 200 -
 2026-04-08 19:55:39,249 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:55:39] "POST /api/compare-models HTTP/1.1" 200 -
+2026-04-08 20:44:21,250 - werkzeug - INFO -  * Detected change in 'C:\\Users\\saniy\\Desktop\\major project\\cyber-threat-detector-deploy\\app.py', reloading
+2026-04-08 20:44:21,742 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 20:44:24,030 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 20:44:24,034 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 20:50:24,399 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.151.65:5000
+2026-04-08 20:50:24,399 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 20:50:24,402 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 20:50:26,395 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 20:50:26,399 - werkzeug - INFO -  * Debugger PIN: 138-630-429
+2026-04-08 20:50:38,157 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:50:38] "GET / HTTP/1.1" 200 -
