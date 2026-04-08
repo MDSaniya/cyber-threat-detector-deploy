@@ -29,7 +29,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'cyberfeddefender-secret-2024')
 app.config['ENV'] = os.environ.get('FLASK_ENV', 'development')
 app.config['DEBUG'] = os.environ.get('DEBUG', 'False').lower() == 'true'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload
+app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 20 MB max upload
 
 # ─────────────────────────────────────────────────────────────
 # LOAD TRAINED MODEL

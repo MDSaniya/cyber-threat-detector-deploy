@@ -1400,7 +1400,7 @@
                              ondragleave="handleDragLeave(event)" onclick="document.getElementById('file-input').click()">
                             <div class="upload-dropzone-icon">📂</div>
                             <div class="upload-dropzone-title">Drag & drop your CSV file here</div>
-                            <div class="upload-dropzone-sub">or click to browse files<br>Maximum file size: 16 MB · CSV format only</div>
+                            <div class="upload-dropzone-sub">or click to browse files<br>Maximum file size: 20 MB · CSV format only</div>
                         </div>
                         <input type="file" id="file-input" accept=".csv" style="display:none" onchange="handleFileSelect(event)">
 
@@ -1824,8 +1824,8 @@ function setFile(file) {
         showUploadError('Please upload a CSV file only.');
         return;
     }
-    if (file.size > 16 * 1024 * 1024) {
-        showUploadError('File size exceeds 16 MB limit.');
+    if (file.size > 20 * 1024 * 1024) {
+        showUploadError('File size exceeds 20 MB limit.');
         return;
     }
     selectedFile = file;
